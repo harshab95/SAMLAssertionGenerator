@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/Users/macbug/eclipse-workspace/SAML/org"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/bcprov-jdk15-1.45.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/commons-lang-2.1.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/httpcore-4.1.3.wso2v1.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/jcip-annotations-1.0.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/jcl-over-slf4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/joda-time-1.6.2.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/jstl-1.1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/jul-to-slf4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/log4j-over-slf4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/not-yet-commons-ssl-0.3.9.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/opensaml-2.2.3.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/openws-1.4.2.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/org.apache.xalan-xalan-2.7.1.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/resolver-2.9.1.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/serializer-2.9.1.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/velocity-1.5.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/xalan-xalan-2.7.1.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/xercesImpl-2.10.0.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/xml-apis-1.4.01.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/xml-apis-xml-apis-1.4.01.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/xml-resolver-1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/xmlsec-1.4.4.jar"/>
+	<classpathentry kind="lib" path="/Users/macbug/Downloads/SAML2AssertionCreator/xmltooling-1.3.2.jar" sourcepath="/Users/macbug/Downloads/xmltooling-1.3.2_source_from_Procyon"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
