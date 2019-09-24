@@ -14,14 +14,10 @@ import java.security.NoSuchProviderException;
 import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.KeyStore;
 import org.opensaml.xml.security.x509.X509Credential;
@@ -88,15 +84,13 @@ public class X509CredentialImpl implements X509Credential
 //        }
 //    }
     
-    private static final String PKCS_1_PEM_HEADER = "-----BEGIN RSA PRIVATE KEY-----";
-    private static final String PKCS_1_PEM_FOOTER = "-----END RSA PRIVATE KEY-----";
     private static final String PKCS_8_PEM_HEADER = "-----BEGIN PRIVATE KEY-----";
     private static final String PKCS_8_PEM_FOOTER = "-----END PRIVATE KEY-----";
 
     public PrivateKey getPrivateKey() {
         byte[] keyDataBytes = null;
 		try {
-			keyDataBytes = Files.readAllBytes(Paths.get("/Users/macbug/eclipse-workspace/SAML/private-file.pem"));
+			keyDataBytes = Files.readAllBytes(Main.privateKeyPath);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -111,11 +105,12 @@ public class X509CredentialImpl implements X509Credential
             byte [] barr = Base64.getMimeDecoder().decode(keyDataString);
             //return barr;
             return readPkcs8PrivateKey(barr);
-        }
+        } 
 
         // We assume it's a PKCS#8 DER encoded binary file
         try {
-			return readPkcs8PrivateKey(Files.readAllBytes(Paths.get("/Users/macbug/eclipse-workspace/SAML/private-file.pem")));
+			//return readPkcs8PrivateKey(Files.readAllBytes(Paths.get("/Users/macbug/eclipse-workspace/SAML/private-file.pem")));
+        	return readPkcs8PrivateKey(Files.readAllBytes(Main.privateKeyPath));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

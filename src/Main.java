@@ -1,8 +1,7 @@
 import java.util.HashMap;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.opensaml.xml.XMLObjectBuilder;
@@ -26,8 +25,6 @@ import org.w3c.dom.ls.LSSerializer;
 import org.w3c.dom.Element;
 import org.opensaml.xml.io.Marshaller;
 import org.opensaml.xml.io.MarshallerFactory;
-import org.w3c.dom.Node;
-import java.io.OutputStream;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 
@@ -68,6 +65,11 @@ import org.opensaml.saml2.core.impl.AssertionBuilder;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.saml2.core.Assertion;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.opensaml.xml.util.Base64;
 import org.opensaml.xml.XMLObject;
 import java.security.KeyStore;
@@ -94,22 +96,57 @@ public class Main
     private static Random random;
     private static final char[] charMapping;
     private static KeyStore keyStore;
+    public static Path publicKeyPath;
+    public static Path privateKeyPath;
+//    
+//    public static void setPaths(String argument4,String argument5) {
+//    	if(argument4 == null)
+//    	{
+//    		Main.publicKeyPath = "/public-file.pem";
+//    	}
+//    	else {
+//    		Main.publicKeyPath = "/private-file.pem";
+//    	}
+//    	
+//    	if(argument5 == null)
+//    	{
+//    		Main.publicKeyPath = "/public-file.pem";
+//    	}
+//    	else {
+//    		Main.publicKeyPath = "/private-file.pem";
+//    	}
+//    }
     
     public static void main(final String[] args) throws Exception {
-        System.setProperty("java.endorsed.dirs", "/home/johann/Desktop/SAML2AssertionCreator/lib");
         if (args.length < 4) {
-            throw new Exception("Invalid number of arguments. Atleast 8 arguments required.");
+            throw new Exception("Invalid number of arguments. Atleast 4 arguments required.");
         }
+        System.out.println("PATH: ");
         System.out.println(System.getProperty("user.dir"));
         Main.id = Integer.toHexString(new Double(Math.random()).intValue());
         Main.issuer = args[0];
         Main.username = args[1];
         Main.recipient = args[2];
         Main.requestedAudiences = args[3].split(",");
-        Main.keyStoreFile = "/Users/macbug/eclipse-workspace/SAML/src/wso2carbon.jks";//args[4];
-        Main.keyStorePassword = args[5];
-        Main.alias = args[6];
-        Main.privateKeyPassword = args[7];
+        //Main.keyStoreFile = "/Users/macbug/eclipse-workspace/SAML/src/wso2carbon.jks";//args[4];
+        String current_directory = System.getProperty("user.dir").toString();        
+        if(args.length > 4)
+    	{
+        	Main.publicKeyPath = Paths.get(current_directory, args[4]);
+        	Main.publicKeyPath = Paths.get(current_directory, args[4]);
+    	}
+    	else {
+    		Main.publicKeyPath = Paths.get(current_directory, "public-file.pem");
+    		System.out.println(Main.publicKeyPath.toString());
+    		Main.privateKeyPath = Paths.get(current_directory, "private-file.pem");
+    		System.out.println(Main.privateKeyPath.toString());
+    	}        
+        
+        //Main.keyStorePassword = args[5];
+        //Main.alias = args[6];
+        Main.alias = null;
+        
+        //Main.privateKeyPassword = args[7];
         if (args.length > 4) {
             final String[] arr$;
             final String[] claimsArray = arr$ = args[4].split(",");
@@ -120,9 +157,9 @@ public class Main
         }
         Main.doAssertionSigning = true;
         final Assertion samlAssertion = buildSAMLAssertion();
-        System.out.println("\nAssertion String: " + marshall((XMLObject)samlAssertion) + "\n");
+        //System.out.println("\nAssertion String: " + marshall((XMLObject)samlAssertion) + "\n");
         final String assertionString = URLEncoder.encode(Base64.encodeBytes(marshall((XMLObject)samlAssertion).getBytes()), "UTF-8");
-        System.out.println("base64-url Encoded Assertion String: " + assertionString + "\n");
+        System.out.println("base64-url Encoded Assertion String: " + "\n" + assertionString + "\n");
     }
     
     private static Assertion buildSAMLAssertion() throws Exception {
@@ -175,7 +212,6 @@ public class Main
             samlAssertion.setConditions(conditions);
             if (Main.doAssertionSigning) {
                 setSignature(samlAssertion, "http://www.w3.org/2000/09/xmldsig#rsa-sha1", getCredential());
-                System.out.println("HELLO");
             }
         }
         catch (Exception e) {
@@ -258,24 +294,32 @@ public class Main
         final X509Data data = (X509Data)buildXMLObject(X509Data.DEFAULT_ELEMENT_NAME);
         final X509Certificate cert = (X509Certificate)buildXMLObject(X509Certificate.DEFAULT_ELEMENT_NAME);
         //final String value = org.apache.xml.security.utils.Base64.encode(cred.getEntityCertificate().getEncoded());
-        final String value = "MIIDWTCCAkGgAwIBAgIEBXHy+TANBgkqhkiG9w0BAQsFADBdMQswCQYDVQQGEwJJ\n" + 
-        		"TjELMAkGA1UECBMCTUgxCzAJBgNVBAcTAk5NMQwwCgYDVQQKEwNSSUwxCzAJBgNV\n" + 
-        		"BAsTAklUMRkwFwYDVQQDExBwZHdzbzJtMS5yaWwuY29tMB4XDTE5MDkxNjA1NTMy\n" + 
-        		"MloXDTQ3MDIwMTA1NTMyMlowXTELMAkGA1UEBhMCSU4xCzAJBgNVBAgTAk1IMQsw\n" + 
-        		"CQYDVQQHEwJOTTEMMAoGA1UEChMDUklMMQswCQYDVQQLEwJJVDEZMBcGA1UEAxMQ\n" + 
-        		"cGR3c28ybTEucmlsLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB\n" + 
-        		"AKi5qVpL/gigvmrF36aObRjLfcdLla+c0vect33dxPqLN361SGHt4H0DfrShZ80M\n" + 
-        		"1qJ8L3bn0cSIq9INYA8mnvda5PPdw8sDEdZnASmAnMz0py8MfDcSjfqjg5RcwJ6Z\n" + 
-        		"WaBVmo4aZXYwFoqODVCNfDw3sHCxrVkiC4w6orDgj+QgI9rKmXwzKKg2kyvj1DTZ\n" + 
-        		"//LSuIkEDXISumlcdkrsy7bOdYXPsV/O5ph57DH9yCeq1Vq+PXREkSiiulDkwr8D\n" + 
-        		"IgbT4m0PzSNnCtyEjyyrIr8b0J2REWs1yAiyEdGPrs+XB2RbSHgI6QVLV/A5ImxW\n" + 
-        		"a3SHPkgfetQXbV1Pg+vmudMCAwEAAaMhMB8wHQYDVR0OBBYEFC3imQgM/VC50W+S\n" + 
-        		"hgQx0uvNq/2eMA0GCSqGSIb3DQEBCwUAA4IBAQA+8yi1Sa7Zd5F5IiYOjH3cH1RF\n" + 
-        		"+vfMP53OMNGyG90lcW//hCx0cyxzDcihtQGThzXLH8f/Eg3OL3gdw9cByCpFx8sZ\n" + 
-        		"8l6Oo0pn09wxYwjaTjhNTD9QV5Z6SR3FJm1GLuW2HOprpw75Q1o6GE6eci9f/dH/\n" + 
-        		"xecFfMlGR2s5M599ZtgPvrQWeO9YCI6zvF2y74I0TfMe/klovn5F5eQUxSrtGAb6\n" + 
-        		"+5ayp9zIflsG05RlmRhTaMhUIG/3MdleUmKWMn2+32vmsFgyZZts+ZR9dRQCaTXT\n" + 
-        		"JOQmKvk3di38omJ0zdApCufp5nT1H/G+wlPKU9YEokncEQACSfWWXjv4tzjy";
+     // Java Program to illustrate reading from 
+     // FileReader using FileReader 
+     
+         // pass the path to the file as a parameter 
+        String value = getPublicKeyfromFile(Main.publicKeyPath);
+        //System.out.println(value);
+        
+        
+//        final String value = "MIIDWTCCAkGgAwIBAgIEBXHy+TANBgkqhkiG9w0BAQsFADBdMQswCQYDVQQGEwJJ\n" + 
+//        		"TjELMAkGA1UECBMCTUgxCzAJBgNVBAcTAk5NMQwwCgYDVQQKEwNSSUwxCzAJBgNV\n" + 
+//        		"BAsTAklUMRkwFwYDVQQDExBwZHdzbzJtMS5yaWwuY29tMB4XDTE5MDkxNjA1NTMy\n" + 
+//        		"MloXDTQ3MDIwMTA1NTMyMlowXTELMAkGA1UEBhMCSU4xCzAJBgNVBAgTAk1IMQsw\n" + 
+//        		"CQYDVQQHEwJOTTEMMAoGA1UEChMDUklMMQswCQYDVQQLEwJJVDEZMBcGA1UEAxMQ\n" + 
+//        		"cGR3c28ybTEucmlsLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB\n" + 
+//        		"AKi5qVpL/gigvmrF36aObRjLfcdLla+c0vect33dxPqLN361SGHt4H0DfrShZ80M\n" + 
+//        		"1qJ8L3bn0cSIq9INYA8mnvda5PPdw8sDEdZnASmAnMz0py8MfDcSjfqjg5RcwJ6Z\n" + 
+//        		"WaBVmo4aZXYwFoqODVCNfDw3sHCxrVkiC4w6orDgj+QgI9rKmXwzKKg2kyvj1DTZ\n" + 
+//        		"//LSuIkEDXISumlcdkrsy7bOdYXPsV/O5ph57DH9yCeq1Vq+PXREkSiiulDkwr8D\n" + 
+//        		"IgbT4m0PzSNnCtyEjyyrIr8b0J2REWs1yAiyEdGPrs+XB2RbSHgI6QVLV/A5ImxW\n" + 
+//        		"a3SHPkgfetQXbV1Pg+vmudMCAwEAAaMhMB8wHQYDVR0OBBYEFC3imQgM/VC50W+S\n" + 
+//        		"hgQx0uvNq/2eMA0GCSqGSIb3DQEBCwUAA4IBAQA+8yi1Sa7Zd5F5IiYOjH3cH1RF\n" + 
+//        		"+vfMP53OMNGyG90lcW//hCx0cyxzDcihtQGThzXLH8f/Eg3OL3gdw9cByCpFx8sZ\n" + 
+//        		"8l6Oo0pn09wxYwjaTjhNTD9QV5Z6SR3FJm1GLuW2HOprpw75Q1o6GE6eci9f/dH/\n" + 
+//        		"xecFfMlGR2s5M599ZtgPvrQWeO9YCI6zvF2y74I0TfMe/klovn5F5eQUxSrtGAb6\n" + 
+//        		"+5ayp9zIflsG05RlmRhTaMhUIG/3MdleUmKWMn2+32vmsFgyZZts+ZR9dRQCaTXT\n" + 
+//        		"JOQmKvk3di38omJ0zdApCufp5nT1H/G+wlPKU9YEokncEQACSfWWXjv4tzjy";
         cert.setValue(value);
         data.getX509Certificates().add(cert);
         keyInfo.getX509Datas().add(data);
@@ -287,11 +331,39 @@ public class Main
         final Marshaller marshaller = marshallerFactory.getMarshaller((XMLObject)assertion);
         marshaller.marshall((XMLObject)assertion);
         Init.init();
-        System.out.println(signatureList);
+        //System.out.println(signatureList);
         Signer.signObjects((List)signatureList);
         return assertion;
     }
     
+ // Java Program to illustrate reading from 
+ // FileReader using FileReader 
+ public static String getPublicKeyfromFile(Path path) throws FileNotFoundException {
+     // pass the path to the file as a parameter 
+	 final String PKCS_8_PEM_HEADER = "-----BEGIN CERTIFICATE-----";
+	 final String PKCS_8_PEM_FOOTER = "-----END CERTIFICATE-----";
+	 
+	 
+     int i; 
+     String publicKeyPath = System.getProperty("user.dir") + path;
+     String data = "";
+     try {
+    	 data = new String(Files.readAllBytes(path));
+     }
+     catch (FileNotFoundException e) 
+     { 
+       e.printStackTrace(); 
+     } 
+     catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+     data = data.replace(PKCS_8_PEM_HEADER, "");
+     data = data.replace(PKCS_8_PEM_FOOTER, "");
+     return data; 
+     }
+    
+
     private static XMLObject buildXMLObject(final QName objectQName) throws Exception {
         final XMLObjectBuilder builder = org.opensaml.xml.Configuration.getBuilderFactory().getBuilder(objectQName);
         if (builder == null) {
@@ -301,13 +373,13 @@ public class Main
     }
     
     private static X509Credential getCredential() throws Exception {
-        Main.keyStore = KeyStore.getInstance("JKS");
-        final char[] storePass = Main.keyStorePassword.toCharArray();
-        final FileInputStream fileInputStream = new FileInputStream(Main.keyStoreFile);
-        Main.keyStore.load(fileInputStream, storePass);
-        String y = getFileContent(fileInputStream,"UTF-8");
-        fileInputStream.close();
-        X509Credential x = (X509Credential)new X509CredentialImpl(Main.keyStore, Main.keyStorePassword, Main.alias, Main.privateKeyPassword);
+        //Main.keyStore = KeyStore.getInstance("JKS");
+        //final char[] storePass = Main.keyStorePassword.toCharArray();
+//        final FileInputStream fileInputStream = new FileInputStream(Main.keyStoreFile);
+//        Main.keyStore.load(fileInputStream, storePass);
+//        String y = getFileContent(fileInputStream,"UTF-8");
+//        fileInputStream.close();
+        X509Credential x = (X509Credential)new X509CredentialImpl(null, "wso2carbon", "apimhc.ril.com", "wso2carbon");
         return x;
         //return (X509Credential)new X509CredentialImpl(Main.keyStore, Main.keyStorePassword, Main.alias, Main.privateKeyPassword);
     }
