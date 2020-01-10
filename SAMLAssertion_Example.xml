@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="mfkbinfpcpcaeokkbmidmklnmbmfdelnhbkffmei" IssueInstant="2020-01-08T10:10:00.289Z" Version="2.0">
+<saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">IDP</saml:Issuer>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+<ds:Reference URI="#mfkbinfpcpcaeokkbmidmklnmbmfdelnhbkffmei">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#">
+<ec:InclusiveNamespaces xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#" PrefixList="ds saml xs xsi"/></ds:Transform>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>g19tYTchaJ0vhkHq40RDBYtblGA=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue>sdcsdc
+</ds:SignatureValue>
+<ds:KeyInfo><ds:X509Data><ds:X509Certificate>PUBLIC KEY</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature>
+<saml:Subject><saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress">EMAIL</saml:NameID>
+<saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+<saml:SubjectConfirmationData InResponseTo="0" NotOnfOrAfter="2020-01-08T10:15:00.289Z" Recipient="IDP/oauth2/token"/>
+</saml:SubjectConfirmation>
+</saml:Subject>
+<saml:Conditions NotBefore="2020-01-08T10:10:00.289Z" NotOnOrAfter="2020-01-08T10:15:00.289Z">
+<saml:AudienceRestriction>
+<saml:Audience>https://IDP/oauth2/token</saml:Audience>
+</saml:AudienceRestriction></saml:Conditions>
+<saml:AuthnStatement AuthnInstant="2020-01-08T10:10:00.457Z"><saml:AuthnContext>
+<saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:Password</saml:AuthnContextClassRef></saml:AuthnContext></saml:AuthnStatement>
+<saml:AttributeStatement>
+<saml:Attribute Name=".">
+<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">.</saml:AttributeValue>
+</saml:Attribute></saml:AttributeStatement>
+</saml:Assertion>
